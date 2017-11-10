@@ -42,7 +42,7 @@ export default class BuildResult extends React.Component<IDeployResultProps> {
     return (
       <Card containerStyle={style}>
         <Text>
-          {name} {result.environment} {result.version}}
+          {name} {result.environment} {result.version}
         </Text>
       </Card>
     );
