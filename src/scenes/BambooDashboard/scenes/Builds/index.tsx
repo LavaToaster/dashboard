@@ -55,7 +55,7 @@ export default class Builds extends React.Component<null, IBuildsState> {
     }
 
     return (
-      <Card title={title} containerStyle={{ flexGrow: 1 }}>
+      <Card title={title} containerStyle={{ flex: .5 }}>
         {this.state.initialLoad ? <Text>Loading...</Text> : null}
         {!this.state.initialLoad && this.state.items.map((item, key) => (
           <BuildResult key={key} result={item}/>

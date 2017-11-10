@@ -54,7 +54,7 @@ export default class Deployments extends React.Component<null, IDeploymentsState
     }
 
     return (
-      <Card title={title} containerStyle={{ flexGrow: 1 }}>
+      <Card title={title} containerStyle={{ flex: .5 }}>
         {this.state.initialLoad ? <Text>Loading...</Text> : null}
         {!this.state.initialLoad && this.state.items.map((item, key) => (
           <DeployResult key={key} result={item}/>
