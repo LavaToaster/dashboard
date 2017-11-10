@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   succeeded: {
     backgroundColor: '#32CD32',
-  }
+  },
 });
 
 export default class BuildResult extends React.Component<IBuildResultProps> {

@@ -17,6 +17,16 @@ export interface IBambooResult {
   isQueued: boolean;
 }
 
+export interface IBambooDeployResult {
+  name: string;
+  environment: string;
+  version: number;
+  triggerName: string;
+  isDeploying: boolean;
+  isFailed: boolean;
+  isQueued: boolean;
+}
+
 export const getRecentBuilds = (maxResults: number = 5) => {
   return axios
     .get(url + '/result', {
@@ -46,9 +56,55 @@ export const getRecentBuilds = (maxResults: number = 5) => {
           isBuilding: !data.finished,
           isFailed: !data.successful,
           isQueued: data.notRunYet,
-        }
-      })
+        };
+      });
     })
-  ;
-}
+    ;
+};
 
+export const getRecentDeployments = (maxResults: number = 5) => {
+  return axios
+    .get(url + '/deploy/dashboard', {
+      auth: { username, password },
+      params: {
+        os_authType: 'basic',
+      },
+    })
+    .then((response) => {
+      const environments = [];
+
+      response.data.forEach((data) => {
+        data.environmentStatuses.forEach((environment) => {
+          // Never deployed to
+          if (!environment.deploymentResult) {
+            return;
+          }
+
+          environments.push({
+            name: data.deploymentProject.name,
+            environment,
+          });
+        });
+      });
+
+      const results = sortBy(environments, (data) => {
+        return data.environment.deploymentResult.queuedDate * -1;
+      });
+
+      return results.slice(0, maxResults);
+    })
+    .then((results: any[]) => {
+      return results.map((data): IBambooDeployResult => {
+        return {
+          name: data.name,
+          environment: data.environment.environment.name,
+          version: data.environment.deploymentResult.deploymentVersion.name,
+          triggerName: data.environment.deploymentResult.deploymentVersion.creatorDisplayName,
+          isDeploying: data.environment.deploymentResult.lifeCycleState === 'IN_PROGRESS',
+          isFailed: data.environment.deploymentResult.deploymentState !== 'SUCCESS',
+          isQueued: !data.startedDate,
+        };
+      });
+    })
+    ;
+};

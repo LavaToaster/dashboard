@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
-import Build from './scenes/build';
+import BambooDashboard from './scenes/BambooDashboard';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,9 +20,7 @@ export default class extends React.Component {
           hidden={true}
         />
 
-
-
-        <Build />
+        <BambooDashboard/>
       </View>
     );
   }
